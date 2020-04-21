@@ -45,6 +45,7 @@ void draw() {
   }
 }   
 
+
 //TAB_NO.2
 class Oscillator {   
 
@@ -54,7 +55,7 @@ class Oscillator {
 
   Oscillator() {   
     angle = new PVector();
-    velocity = new PVector(random(-0.05, 0.05), random(-0.05, 0.05));
+    velocity = new PVector(random(-0.02, 0.02), random(-0.02, 0.02));
     // small:  velocity = new PVector(random(-0.02, 0.02), random(-0.02, 0.02));
     // amplitude = new PVector(random(200,width/2), random(200,height/2));
     amplitude = new PVector(random(220,width/4), random(120,height/4));
@@ -84,7 +85,7 @@ class Oscillator {
       noStroke();
       fill(225, 125, 255, 200);
       strokeWeight(2);
-      sphere(x/2); //30//100
+      sphere(x/4); //30//100
       popMatrix();
 
   }
