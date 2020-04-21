@@ -77,7 +77,10 @@ class Mover {
     pushMatrix();
     translate(location.x, location.y, 0); 
     noStroke();
-    fill(225, 255, 25);//fill(225, 255, 225);
+    fill(225, 255, 25);
+    //fill(225, 255, 225);
+    //fill(255, 225, 175);
+    
     strokeWeight(2);
     sphere(mass*24); //30//100
     popMatrix();
