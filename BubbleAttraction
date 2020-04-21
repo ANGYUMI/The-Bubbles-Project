@@ -1,0 +1,98 @@
+// TAB_NO.1
+Mover[] movers = new Mover[20];
+
+float g = 0.4;
+
+void setup() {
+  size(1285, 725, P3D);  
+  smooth();
+  for (int i = 0; i < movers.length; i++) {
+    movers[i] = new Mover(random(0.1,2),random(width),random(height)); 
+  }
+  cursor(CROSS);
+}
+
+void draw() {
+  background(0);
+  
+// ------ light ------ 
+  ambientLight(120, 120, 120);
+  directionalLight(255, 0, 255, mouseX, mouseY, width/2);//
+  specular(255, 0, 255); // light color
+
+  pointLight(0, 255, 255, mouseX, mouseY, width/2);//highlight color // syn: (r, g, b, x, y, z);
+  lightSpecular(255, 0, 255);
+  float s = map(mouseX, 0, width, 1, 10);
+  
+  shininess(s);
+// ------ movers ------  
+  for (int i = 0; i < movers.length; i++) {
+    for (int j = 0; j < movers.length; j++) {
+      if (i != j) {
+        PVector force = movers[j].attract(movers[i]);
+        movers[i].applyForce(force);
+      }
+    }
+
+    movers[i].update();
+    movers[i].display();
+  }
+
+}
+
+//TAB_NO.2
+class Mover {
+
+  PVector location;
+  PVector velocity;
+  PVector acceleration;
+  float mass;
+
+  Mover(float m, float x, float y) {
+    mass = m;
+    location = new PVector(x, y);
+    velocity = new PVector(0, 0);
+    acceleration = new PVector(0, 0);
+  }
+
+  void applyForce(PVector force) {
+    PVector f = PVector.div(force, mass);
+    acceleration.add(f);
+  }
+
+  void update() {
+    velocity.add(acceleration);
+    location.add(velocity);
+    acceleration.mult(0);
+  }
+
+  void display() {
+    stroke(0);
+    strokeWeight(2);
+    fill(0, 100);
+//    ellipse(location.x, location.y, mass*24, mass*24);
+    
+//sphere
+    pushMatrix();
+    translate(location.x, location.y, 0); 
+    noStroke();
+    fill(225, 125, 255, 200);
+    strokeWeight(2);
+    sphere(mass*24); //30//100
+    popMatrix();
+
+  }
+
+  PVector attract(Mover m) {
+    PVector force = PVector.sub(location, m.location);             // Calculate direction of force
+    float distance = force.mag();                                 // Distance between objects
+    distance = constrain(distance, 5.0, 25.0);                             // Limiting the distance to eliminate "extreme" results for very close or very far objects
+    force.normalize();                                            // Normalize vector (distance doesn't matter here, we just want this vector for direction
+
+    float strength = (g * mass * m.mass) / (distance * distance); // Calculate gravitional force magnitude
+    force.mult(strength);                                         // Get force vector --> magnitude * direction
+    return force;
+  }
+
+
+}
