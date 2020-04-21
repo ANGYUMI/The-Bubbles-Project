@@ -1,0 +1,92 @@
+//TAB_NO.1
+// Learning Processing
+// Daniel Shiffman
+// http://www.learningprocessing.com
+
+// Exercise 13-6: Encapsulate Example 13-6 into an Oscillator object. Create an array 
+// of Oscillators, each moving at diff erent rates along the x and y axes. Here is some code for the 
+// Oscillator class to help you get started.  
+
+// An array of objects
+Oscillator[] oscillators = new Oscillator[8];
+
+void setup()  {   
+  size(1285, 725, P3D);  
+  smooth();  
+  // Initialize all objects
+  for (int i = 0; i < oscillators.length; i++) {
+    oscillators[i] = new Oscillator();
+  }
+  background(0);  
+  cursor(CROSS);
+}   
+
+void draw() {     
+  rectMode(CORNER);
+  noStroke();
+//  fill(255,10);
+  background(0);//85, 55, 255
+  // ------ light ------ 
+  ambientLight(160, 160, 160);
+  directionalLight(255, 0, 255, mouseX, mouseY, width/2);//
+  specular(255, 0, 255); // light color
+
+  pointLight(0, 255, 255, mouseX, mouseY, width/2);//highlight color // syn: (r, g, b, x, y, z);
+  lightSpecular(255, 0, 255);
+  float s = map(mouseX, 0, width, 1, 10);
+  shininess(s);
+  
+//  rect(0,0,width,height);
+
+  // Run all objects
+  for (int i = 0; i < oscillators.length; i++) {
+    oscillators[i].oscillate();
+    oscillators[i].display();
+  }
+}   
+
+//TAB_NO.2
+class Oscillator {   
+
+  PVector angle;
+  PVector velocity;
+  PVector amplitude;
+
+  Oscillator() {   
+    angle = new PVector();
+    velocity = new PVector(random(-0.02, 0.02), random(-0.02, 0.02));
+    // small:  velocity = new PVector(random(-0.02, 0.02), random(-0.02, 0.02));
+    // amplitude = new PVector(random(200,width/2), random(200,height/2));
+    amplitude = new PVector(random(width/4,height/4), random(width/4,height/4));
+    // amplitude = new PVector(random(width/2,height/2), random(width/2,height/2));
+  }   
+
+  void oscillate() {
+    angle.add(velocity);
+  }   
+
+  void display() {   
+
+    float x = sin(angle.x)*amplitude.x;
+    float y = sin(angle.y)*amplitude.y;
+
+//    pushMatrix();
+//    translate(width/2, height/2);
+//    stroke(0);
+//    strokeWeight(2);
+//    fill(127,127);
+//    line(0, 0, x, y);  
+//    ellipse(x, y, 32, 32);  
+//    popMatrix();
+    
+      pushMatrix();
+      translate(width/2, height/2);
+      translate(x, y, 0); 
+      noStroke();
+      fill(225, 125, 255, 200);
+      strokeWeight(2);
+      sphere(x/4); //x/3
+      popMatrix();
+
+  }
+}
