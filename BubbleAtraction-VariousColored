@@ -81,6 +81,18 @@ class Mover {
     //fill(225, 255, 225);
     //fill(255, 225, 175);
     //fill(255, 125, 175);
+    
+/*
+   //ambientLight(120, 120, 120);
+   //directionalLight(255, 0, 255, width, height, width/2);//
+   //specular(255, 255, 255); // light color
+   //pointLight(0, 255, 255, width, height, width/2);//highlight color // syn: (r, g, b, x, y, z);
+   //lightSpecular(255, 0, 255);
+   //float s = map(mouseX, 0, width, 1, 10);
+   //shininess(s);
+   //fill(125, 255, 525);
+*/
+
     strokeWeight(2);
     sphere(mass*24); //30//100
     popMatrix();
