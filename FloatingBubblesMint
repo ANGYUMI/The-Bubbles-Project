@@ -1,0 +1,103 @@
+// TAB_NO1
+// Learning Processing
+// Daniel Shiffman
+// http://www.learningprocessing.com
+
+// Exercise 13-6: Encapsulate Example 13-6 into an Oscillator object. Create an array 
+// of Oscillators, each moving at diff erent rates along the x and y axes. Here is some code for the 
+// Oscillator class to help you get started.  
+
+// An array of objects
+Oscillator[] oscillators = new Oscillator[10];
+
+float angle = 0.0;    // Current angle
+float speed = 0.02;   // Speed of motion
+float radius = 1000.0;  // Range of motion
+
+void setup()  {   
+  size(1285, 725, P3D);  
+  smooth();  
+  // Initialize all objects
+  for (int i = 0; i < oscillators.length; i++) {
+    oscillators[i] = new Oscillator();
+  }
+  background(255);  
+  cursor(CROSS);
+}   
+
+void draw() {     
+  rectMode(CORNER);
+  noStroke();
+//  fill(255,100);
+  fill(0);
+  rect(0,0,width,height);
+    
+  // ------ light direction ------ 
+  angle += speed;  // Update the angle
+  float sinval = sin(angle);
+  float cosval = cos(angle);
+  // Set the position of the small circle based on new
+  // values from sine and cosine
+  float lx = (cosval * radius);
+  float ly = (sinval * radius);
+  
+  // ------ light ------ 
+  ambientLight(80, 80, 80);
+  directionalLight(125, 0, 255, lx, ly, 0);//
+  specular(255, 0, 255); // light color
+
+  pointLight(25, 255, 255, lx, ly, width/2);//highlight color // syn: (r, g, b, x, y, z);
+  lightSpecular(0, 0, 255);
+  float s = map(mouseX, 0, width, 1, 10);
+  shininess(s);
+
+  // Run all objects
+  for (int i = 0; i < oscillators.length; i++) {
+    oscillators[i].oscillate();
+    oscillators[i].display();
+  }
+}   
+
+//TAB_NO2
+class Oscillator {   
+
+  PVector angle;
+  PVector velocity;
+  PVector amplitude;
+
+  Oscillator() {   
+    angle = new PVector();
+    velocity = new PVector(random(-0.01, 0.01), random(-0.01, 0.01));
+    amplitude = new PVector(random(200,width/2), random(200,height/2));
+  }   
+
+  void oscillate() {
+    angle.add(velocity);
+  }   
+
+  void display() {   
+
+    float x = sin(angle.x)*amplitude.x;
+    float y = sin(angle.y)*amplitude.y;
+
+//    pushMatrix();
+//    translate(width/2, height/2);
+//    stroke(255);
+//    strokeWeight(1);
+//    fill(0, 255, 255);
+//    line(0, 0, x, y);  
+//    ellipse(y, x, 32, 32);  
+//    popMatrix();
+    
+      pushMatrix();
+      translate(width/2, height/2);
+      translate(x, y, 0); 
+      noStroke();
+      fill(255, 255, 255);
+      strokeWeight(2);
+      sphere(30); //30
+      popMatrix();
+ 
+
+  }
+}   
