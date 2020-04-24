@@ -41,35 +41,57 @@ Node selectedNode = null;
 
 float nodeDiameter = 40;
 
+//light direction
+float angle = 0.0;    // Current angle
+float speed = 0.02;   // Speed of motion
+float radius = 1000.0;  // Range of motion
+
+// bubbles direction
+// Example 1-1: Bouncing Ball, no vectors
+float x = 100;
+float y = 100;
+float xspeed = 2.5; //2.5
+float yspeed = 2; //2
 
 void setup() {
   size(1285, 725, P3D);  
-  background(255);
+  background(0);
   smooth();
   noStroke();
-  initNodesAndSprings();
+  initNodesAndSprings(); 
+//  cursor(CROSS);
+  noCursor();
   
-  cursor(CROSS);
 }
 
 
 void draw() {
   
+  background(0);
+  //  fill(255, 20);
+  //  rect(0, 0, width, height); 
+  
+  // ------ light direction ------ 
+  angle += speed;  // Update the angle
+  float sinval = sin(angle);
+  float cosval = cos(angle);
+  // Set the position of the small circle based on new
+  // values from sine and cosine
+  float lx = (cosval * radius);
+  float ly = (sinval * radius);
+  
   // ------ light ------ 
   ambientLight(120, 120, 120);
-  directionalLight(255, 0, 255, width, height, width/2);//
+  directionalLight(255, 0, 255, lx, ly, width/2);//
   specular(255, 25, 255); // light color
 
-  pointLight(0, 255, 255, width, height, width/2);//highlight color // syn: (r, g, b, x, y, z);
+  pointLight(0, 255, 255, lx, ly, width/2);//highlight color // syn: (r, g, b, x, y, z);
   lightSpecular(255, 0, 255);
   float s = map(mouseX, 0, width, 1, 10);
   shininess(s);
   
 //  if (savePDF) beginRecord(PDF, timestamp()+".pdf");
 
-  background(255);
-  //  fill(255, 20);
-  //  rect(0, 0, width, height);
 
   // let all nodes repel each other
   for (int i = 0 ; i < nodes.length; i++) {
@@ -85,8 +107,8 @@ void draw() {
   } 
 
   if (selectedNode != null) {
-    selectedNode.x = mouseX;
-    selectedNode.y = mouseY;
+    selectedNode.x = x;
+    selectedNode.y = y;
   }
 
   // draw nodes
@@ -103,7 +125,7 @@ void draw() {
 //      translate(width/2, height/2);
       translate(nodes[i].x, nodes[i].y, 0); 
       noStroke();
-      fill(225, 85, 255);
+      fill(225, 155, 255);
       strokeWeight(2);
       sphere(nodeDiameter);
       sphere(nodeDiameter-4);
@@ -117,17 +139,42 @@ void draw() {
     println("saving to pdf – finishing");
     endRecord();
   }
+  
+  // bubbles direction  
+  // Add the current speed to the location.
+  x = x + xspeed;
+  y = y + yspeed;     
+      
+  if ((x > width+nodeDiameter*4) || (x < -nodeDiameter*4)) {
+    xspeed = xspeed * -1;
+  }
+  if ((y > height+nodeDiameter*4) || (y < -nodeDiameter*4)) {
+    yspeed = yspeed * -1;
+  }
+  
+// Ignore anything greater than this distance
+  float maxDist = 20;
+  for (int i = 0; i < nodes.length; i++) {
+    Node checkNode = nodes[i];
+    float d = dist(x, y, checkNode.x, checkNode.y);
+    if (d < maxDist) {
+      selectedNode = checkNode;
+      maxDist = d;
+    }
+  }
+
+
 }
 
 
 void initNodesAndSprings() {
   // init nodes
-  float rad = nodeDiameter/2;
+  float rad = nodeDiameter*4;
   for (int i = 0; i < nodes.length; i++) {
     nodes[i] = new Node(width/2+random(-200, 200), height/2+random(-200, 200));
-    nodes[i].setBoundary(rad, rad, width-rad, height-rad);
+    nodes[i].setBoundary(-rad, -rad, width+rad, height+rad);
     nodes[i].setRadius(100);
-    nodes[i].setStrength(-5);
+    nodes[i].setStrength(-50);
   } 
 
   // set springs randomly
@@ -146,19 +193,19 @@ void initNodesAndSprings() {
 
 }
 
-
-void mousePressed() {
-  // Ignore anything greater than this distance
-  float maxDist = 20;
-  for (int i = 0; i < nodes.length; i++) {
-    Node checkNode = nodes[i];
-    float d = dist(mouseX, mouseY, checkNode.x, checkNode.y);
-    if (d < maxDist) {
-      selectedNode = checkNode;
-      maxDist = d;
-    }
-  }
-}
+// bubbles direction - mouseX, mouseY
+//void mousePressed() {
+//  // Ignore anything greater than this distance
+//  float maxDist = 20;
+//  for (int i = 0; i < nodes.length; i++) {
+//    Node checkNode = nodes[i];
+//    float d = dist(mouseX, mouseY, checkNode.x, checkNode.y);
+//    if (d < maxDist) {
+//      selectedNode = checkNode;
+//      maxDist = d;
+//    }
+//  }
+//}
 
 void mouseReleased() {
   if (selectedNode != null) {
