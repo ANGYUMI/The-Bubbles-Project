@@ -100,7 +100,7 @@ class Oscillator {
       translate(width/2, height/2);
       translate(x, y, 0); 
       noStroke();
-      fill(225, 165, 195);
+      fill(215, 185, 225);
       strokeWeight(2);
       sphere(x/4); //x/3
       popMatrix();
