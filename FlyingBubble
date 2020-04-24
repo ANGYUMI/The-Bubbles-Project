@@ -10,6 +10,10 @@
 // An array of objects
 Oscillator[] oscillators = new Oscillator[10];
 
+float angle = 0.0;    // Current angle
+float speed = 0.02;   // Speed of motion
+float radius = 1000.0;  // Range of motion
+
 void setup()  {   
   size(1285, 725, P3D);  
   smooth();  
@@ -24,11 +28,23 @@ void setup()  {
 void draw() {     
   rectMode(CORNER);
   noStroke();
-  fill(255,100);
+  fill(0, 255, 0, 100);
+  rect(0,0,width,height); 
+  
+  // ------ light direction ------ 
+  angle += speed;  // Update the angle
+  float sinval = sin(angle);
+  float cosval = cos(angle);
+  // Set the position of the small circle based on new
+  // values from sine and cosine
+  float lx = (cosval * radius);
+  float ly = (sinval * radius);
   
   // ------ light ------ 
+  pushMatrix();
+  translate(width/2, height/2);
   ambientLight(120, 120, 120);
-  directionalLight(255, 0, 255, mouseX, mouseY, width/2);//
+  directionalLight(255, 0, 255, lx, ly, width/2);//
   specular(255, 0, 255); // light color
 
   pointLight(0, 0, 255, mouseX, mouseY, width/2);//highlight color // syn: (r, g, b, x, y, z);
@@ -36,7 +52,7 @@ void draw() {
   float s = map(mouseX, 0, width, 1, 10);
   shininess(s);
   
-  rect(0,0,width,height);
+  popMatrix();
 
   // Run all objects
   for (int i = 0; i < oscillators.length; i++) {
