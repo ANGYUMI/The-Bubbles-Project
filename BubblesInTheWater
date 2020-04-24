@@ -14,6 +14,11 @@ Mover[] movers = new Mover[14];
 // Liquid
 Liquid liquid;
 
+//light direction
+float angle = 0.0;    // Current angle
+float speed = 0.02;   // Speed of motion
+float radius = 1000.0;  // Range of motion
+
 void setup() {
   size(1285, 725, P3D);  
   smooth();
@@ -24,14 +29,23 @@ void setup() {
 }
 
 void draw() {
-  background(255);
+background(0, 255, 0);
+
+// ------ light direction ------ 
+  angle += speed;  // Update the angle
+  float sinval = sin(angle);
+  float cosval = cos(angle);
+  // Set the position of the small circle based on new
+  // values from sine and cosine
+  float lx = (cosval * radius);
+  float ly = (sinval * radius);
   
 // ------ light ------ 
   ambientLight(120, 120, 120);
-  directionalLight(255, 0, 255, mouseX, mouseY, width/2);//
+  directionalLight(255, 0, 255, lx, ly, width/2);//
   specular(255, 0, 255); // light color
 
-  pointLight(0, 255, 255, mouseX, mouseY, width/2);//highlight color // syn: (r, g, b, x, y, z);
+  pointLight(0, 255, 255, lx, ly, width/2);//highlight color // syn: (r, g, b, x, y, z);
   lightSpecular(255, 0, 255);
   float s = map(mouseX, 0, width, 1, 10);
   
@@ -62,8 +76,7 @@ void draw() {
     movers[i].checkEdges();
   }
   
-  fill(255);
-  //text("click mouse to reset",10,30);
+//text("click mouse to reset",10,30);
   
 //  if (frameCount % 20 == 0) saveFrame("ch2_05_####.png");
 }
@@ -137,8 +150,8 @@ void reset() {
   
   void display() {
     noStroke();
-    fill(155, 75, 255);
-    rect(x,y,w,h);
+//    fill(155, 75, 255);
+//    rect(x,y,w,h);
   }
 
 }
