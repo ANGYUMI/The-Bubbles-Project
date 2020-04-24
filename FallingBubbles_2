@@ -1,5 +1,5 @@
 //TAB_NO.1
-Mover[] movers = new Mover[40];
+Mover[] movers = new Mover[10];
 
 //light direction
 float angle = 0.0;    // Current angle
@@ -8,7 +8,7 @@ float radius = 1000.0;  // Range of motion
 
 void setup() {
   size(1285, 725, P3D);
-  background(0); //155, 175, 255
+  background(155, 175, 255);
   randomSeed(1);
   smooth();
   for (int i = 0; i < movers.length; i++) {
@@ -17,9 +17,9 @@ void setup() {
 }
 
 void draw() {
-  background(0, 255, 0);//155, 175, 255
-  fill(155, 75, 255);
-  
+//  background(155, 175, 255);
+  background(0, 255, 0);
+
 // ------ light direction ------ 
   angle += speed;  // Update the angle
   float sinval = sin(angle);
@@ -32,20 +32,21 @@ void draw() {
 // ------ light ------ 
   ambientLight(120, 120, 120);
   directionalLight(255, 0, 255, lx, ly, width/2);//
-  specular(255, 25, 255); // light color
+  specular(255, 0, 255); // light color
 
   pointLight(0, 255, 255, lx, ly, width/2);//highlight color // syn: (r, g, b, x, y, z);
   lightSpecular(255, 0, 255);
   float s = map(mouseX, 0, width, 1, 10);
+  
   shininess(s);
   
-//  
+   
   for (int i = 0; i < movers.length; i++) {
 
     PVector wind = new PVector(0, 0); //0.01, 0
     PVector gravity = new PVector(0, 0.05*movers[i].mass); // 0,  0.1*movers[i].mass
 
-    float c = 0.08;
+    float c = 0.05;
     PVector friction = movers[i].velocity.get();
     friction.mult(-1); 
     friction.normalize();
@@ -98,7 +99,6 @@ class Mover {
     translate(location.x, location.y, 0); 
     noStroke();
     fill(225, 125, 255);
-//    fill(195, 255, 225);
     strokeWeight(2);
     sphere(mass*8); //30//100
     popMatrix();
