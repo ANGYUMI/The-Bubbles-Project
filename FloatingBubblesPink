@@ -10,6 +10,7 @@
 // An array of objects
 Oscillator[] oscillators = new Oscillator[10];
 
+//light direction
 float angle = 0.0;    // Current angle
 float speed = 0.02;   // Speed of motion
 float radius = 1000.0;  // Range of motion
