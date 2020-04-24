@@ -1,7 +1,13 @@
 // TAB_NO.1
 Mover[] movers = new Mover[20];
 
-float g = 0.4;
+float g = 0.8;
+
+//light direction
+float angle = 0.0;    // Current angle
+float speed = 0.02;   // Speed of motion
+float radius = 1000.0;  // Range of motion
+
 
 void setup() {
   size(1285, 725, P3D);  
@@ -12,15 +18,26 @@ void setup() {
   cursor(CROSS);
 }
 
+
 void draw() {
   background(0);
+
+  // ------ light direction ------ 
+  angle += speed;  // Update the angle
+  float sinval = sin(angle);
+  float cosval = cos(angle);
+  // Set the position of the small circle based on new
+  // values from sine and cosine
+  float lx = (cosval * radius);
+  float ly = (sinval * radius);
+  
   
   // ------ light ------ 
   ambientLight(120, 120, 120);
-  directionalLight(255, 0, 255, width, height, width/2);//
+  directionalLight(255, 0, 255, lx, ly, width/2);//
   specular(255, 25, 255); // light color
 
-  pointLight(0, 255, 255, width, height, width/2);//highlight color // syn: (r, g, b, x, y, z);
+  pointLight(0, 255, 255, lx, ly, width/2);//highlight color // syn: (r, g, b, x, y, z);
   lightSpecular(255, 0, 255);
   float s = map(mouseX, 0, width, 1, 10);
   shininess(s);
@@ -77,7 +94,7 @@ class Mover {
     pushMatrix();
     translate(location.x, location.y, 0); 
     noStroke();
-    fill(225, 125, 255);
+    fill(225, 165, 255);
     strokeWeight(2);
     sphere(mass*24); //30//100
     popMatrix();
