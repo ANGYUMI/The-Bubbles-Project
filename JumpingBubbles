@@ -44,13 +44,13 @@ void draw() {
   float ly = (sinval * radius);
   
   // ------ light ------ 
-  ambientLight(120, 120, 120);
-  directionalLight(255, 0, 255, lx, ly, width/2);//
-  specular(255, 0, 255); // light color
+  ambientLight(0, 120, 120);
+  directionalLight(0, 125, 225, lx, ly, width/2);//
+  specular(255, 255, 255); // light color
 
-  pointLight(0, 255, 255, lx, ly, width/2);//highlight color // syn: (r, g, b, x, y, z);
-  lightSpecular(255, 0, 255);
-  float s = map(mouseX, 0, width, 1, 10);
+  pointLight(205, 85, 255, lx, ly, width/2);//highlight color // syn: (r, g, b, x, y, z);
+  lightSpecular(125, 255, 255);
+  float s = map(lx, 0, width, 1, 10);
   shininess(s);
   
 //  rect(0,0,width,height);
@@ -100,7 +100,7 @@ class Oscillator {
       translate(width/2, height/2);
       translate(x, y, 0); 
       noStroke();
-      fill(225, 185, 255);
+      fill(225, 165, 195);
       strokeWeight(2);
       sphere(x/4); //x/3
       popMatrix();
